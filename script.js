@@ -223,8 +223,15 @@ setFlight("inbound");
 let compactOn = false;
 window.addEventListener("scroll", () => {
   const y = window.scrollY;
-  if (y > 520 && !compactOn) { document.body.classList.add("compact"); compactOn = true; }
-  if (y < 420 && compactOn)  { document.body.classList.remove("compact"); compactOn = false; }
+  const isMobile = window.matchMedia("(max-width: 520px)").matches;
+
+window.addEventListener("scroll", () => {
+  const y = window.scrollY;
+  const onAt = isMobile ? 260 : 520;
+  const offAt = isMobile ? 180 : 420;
+
+  if (y > onAt && !compactOn) { document.body.classList.add("compact"); compactOn = true; }
+  if (y < offAt && compactOn) { document.body.classList.remove("compact"); compactOn = false; }
 });
 
 /* =========================================================

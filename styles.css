@@ -693,3 +693,241 @@ main{
   pointer-events: none;
   z-index: 1000;
 }
+/* =========================
+   Mobile optimisation (iOS / WhatsApp)
+========================= */
+@media (max-width: 520px){
+
+  body{
+    padding: 14px 12px;
+  }
+
+  .header{
+    padding-top: 6px;
+  }
+
+  /* HERO */
+  .heroImg{
+    width: 100%;
+    max-width: 100%;
+    height: 190px;
+    object-fit: cover;
+    border-radius: 22px;
+  }
+
+  h1{
+    font-size: 28px !important;
+    line-height: 1.08;
+    text-align: left;
+    margin-top: 14px;
+  }
+
+  .sub{
+    font-size: 14px;
+    text-align: left;
+    margin-top: 6px;
+    opacity: .85;
+  }
+
+  /* Sticky stack tighter */
+  .stickyStack{
+    position: sticky;
+    top: calc(env(safe-area-inset-top) + 8px);
+    z-index: 50;
+    padding: 10px;
+    border-radius: 22px;
+  }
+
+  /* Chips become true “app tabs” */
+  .dayChipsWrap{
+    padding: 8px;
+    border-radius: 999px;
+  }
+
+  .dayChip{
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  /* Countdown card becomes 2x2 grid */
+  .countdownCard{
+    padding: 12px;
+    border-radius: 20px;
+  }
+
+  .countdownTop{
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .countdownTitle{
+    font-size: 18px;
+  }
+
+  .countdownGrid{
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+
+  .timeBox{
+    padding: 12px !important;
+    border-radius: 18px !important;
+  }
+
+  .timeBox .num{
+    font-size: 22px !important;
+  }
+
+  /* Boarding pass: full width, reduce height */
+  .bpWrap{
+    border-radius: 22px;
+  }
+
+  .boardingPass{
+    border-radius: 22px;
+    overflow: hidden;
+  }
+
+  .bpInner{
+    min-height: 220px;
+  }
+
+  .bpTop{
+    gap: 10px;
+  }
+
+  .bpBrand{
+    font-size: 12px;
+  }
+
+  .airport{
+    font-size: 26px;
+  }
+
+  .bpBottom{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  /* Controls stack nicely */
+  .controls{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  #download, #reset{
+    width: 100%;
+  }
+
+  /* Toolbar wraps */
+  .toolbar{
+    gap: 10px;
+  }
+
+  .vibes{
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .vibe{
+    padding: 9px 12px;
+    font-size: 12px;
+    border-radius: 999px;
+  }
+
+  .weather{
+    width: 100%;
+    justify-content: flex-start;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  /* Main itinerary: edge-to-edge cards */
+  main{
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .day{
+    margin-top: 14px;
+  }
+
+  .dayHeader{
+    padding: 12px 14px;
+    border-radius: 18px;
+  }
+
+  .dayHeader h2{
+    font-size: 14px;
+    letter-spacing: .02em;
+  }
+
+  .card{
+    padding: 14px;
+    border-radius: 22px;
+  }
+
+  .top{
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .title{
+    font-size: 18px;
+  }
+
+  .pickBtn{
+    padding: 10px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+  }
+
+  /* IG preview card: tighter */
+  .igCard{
+    padding: 12px;
+    border-radius: 18px;
+  }
+
+  .igAvatar{
+    width: 38px;
+    height: 38px;
+    border-radius: 14px;
+  }
+
+  .igOpen{
+    padding: 10px 12px;
+  }
+
+  /* Footer approve button: iOS friendly */
+  .approveBtn{
+    width: 100%;
+    border-radius: 18px;
+    padding: 14px 16px;
+    font-size: 16px;
+  }
+}
+
+/* Make sticky shrink in compact mode more dramatic on mobile */
+@media (max-width: 520px){
+  body.compact .countdownCard{
+    padding: 10px;
+  }
+  body.compact .bpWrap{
+    display: none; /* hide boarding pass when scrolling deep on mobile */
+  }
+  body.compact .packingBar{
+    display: none; /* optional: declutter */
+  }
+  body.compact .toolbar{
+    display: none; /* optional: declutter */
+  }
+  body.compact .controls{
+    display: none; /* optional: declutter */
+  }
+  body.compact .mapBar{
+    display: none; /* optional: declutter */
+  }
+}

@@ -113,8 +113,8 @@ function tickCountdown(){
 
   countdownHint.textContent =
     targetMode === "landing"
-      ? "She lands Doha (HIA) at 23:50 on Fri 06 Feb ✈️"
-      : "She takes off from Birmingham (BHX) at 14:10 on Fri 06 Feb ✈️";
+      ? "Reemy lands in Doha (HIA) at 23:50 on Fri 06 Feb ✈️"
+      : "Reemy takes off from Birmingham (BHX) at 14:10 on Fri 06 Feb ✈️";
 }
 setCountdownMode("landing");
 setInterval(tickCountdown, 1000);

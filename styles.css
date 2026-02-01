@@ -195,3 +195,83 @@
   .countdownGrid{ grid-template-columns: repeat(2, 1fr); }
   .bpBottom{ grid-template-columns: 1fr; }
 }
+/* -----------------------
+   Boarding pass: FLIP
+------------------------ */
+.boardingPass{
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  background: transparent;            /* faces hold the gradient */
+  perspective: 1200px;                /* depth for flip */
+}
+
+/* inner that flips */
+.bpInner{
+  position: relative;
+  width: 100%;
+  transform-style: preserve-3d;
+  transition: transform 700ms cubic-bezier(.2,.8,.2,1);
+}
+
+/* flip state */
+.boardingPass.flipped .bpInner{
+  transform: rotateY(180deg);
+}
+
+/* front & back faces */
+.bpFace{
+  position: relative;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 18px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #111827, #2a0d2f);
+  color: #fff;
+}
+
+/* back face rotated */
+.bpBack{
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+}
+
+/* Ensure clickable/tappable elements don’t feel “sticky” */
+.tab, .pillBtn { -webkit-tap-highlight-color: transparent; }
+
+/* -----------------------
+   Boarding pass: SCANNER
+------------------------ */
+.boardingPass::after{
+  content: "";
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  top: -40%;
+  height: 90px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255,255,255,.18),
+    transparent
+  );
+  transform: translateY(0);
+  opacity: .65;
+  pointer-events: none;
+  animation: scanLine 2.6s ease-in-out infinite;
+  mix-blend-mode: screen;
+}
+
+@keyframes scanLine{
+  0%   { transform: translateY(0); opacity: 0; }
+  10%  { opacity: .6; }
+  50%  { transform: translateY(520px); opacity: .65; }
+  80%  { opacity: .25; }
+  100% { transform: translateY(620px); opacity: 0; }
+}
+
+/* Slightly slow scan on mobile (feels smoother) */
+@media (max-width: 520px){
+  .boardingPass::after{ animation-duration: 3.0s; }
+}

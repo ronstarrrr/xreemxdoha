@@ -573,3 +573,77 @@ main{
   border-radius: 999px;
   font-weight: 900;
 }
+/* =========================
+   STICKY APP HEADER STACK
+========================= */
+
+.stickyStack{
+  position: sticky;
+  top: 12px;                 /* breathing space from top */
+  z-index: 50;
+  display: grid;
+  gap: 12px;
+  padding-bottom: 10px;
+}
+
+/* Add a subtle “glass” backing so it reads clean over content */
+.stickyStack::before{
+  content:"";
+  position: absolute;
+  inset: -12px -8px -12px -8px;
+  background: linear-gradient(
+    180deg,
+    rgba(255,243,247,.92),
+    rgba(255,255,255,.78)
+  );
+  border-radius: 26px;
+  filter: blur(0px);
+  z-index: -1;
+  box-shadow: 0 18px 45px rgba(0,0,0,.06);
+  border: 1px solid rgba(17,24,39,.08);
+  backdrop-filter: blur(10px);
+}
+
+/* Ensure sticky doesn't look too tall */
+.countdownCard, .bpWrap{
+  margin-top: 0;
+}
+
+/* Make boarding pass slightly shorter on desktop so it doesn’t dominate */
+.bpWrap{
+  padding: 12px;
+}
+.boardingPass .bpMid{
+  padding: 12px;
+}
+.boardingPass .bpBottom{
+  padding: 12px;
+}
+
+/* Controls + toolbar should feel like pill toolbars */
+.controls, .toolbar{
+  margin: 0 auto;
+}
+
+/* Give the main content some top padding so it doesn't feel cramped under sticky */
+main{
+  padding-top: 12px;
+}
+
+/* Mobile: sticky stack should not eat the screen */
+@media (max-width: 520px){
+  .stickyStack{
+    top: 8px;
+    gap: 10px;
+  }
+
+  /* Reduce heights a bit */
+  .heroImg{ height: 240px; }
+  .boardingPass .bpMid{ grid-template-columns: 1fr auto 1fr; }
+  .boardingPass .airport{ font-size: 20px; }
+}
+
+/* If user scrolls a lot, we can keep it tidy (optional) */
+.compact .bpWrap{
+  display: none; /* hide boarding pass in compact mode */
+}

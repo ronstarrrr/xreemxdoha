@@ -449,3 +449,21 @@ function render(){
 }
 
 render();
+// Compact sticky mode after scrolling
+let compactOn = false;
+
+window.addEventListener("scroll", () => {
+  const y = window.scrollY;
+
+  // when she scrolls past 520px, compact the sticky stack
+  if (y > 520 && !compactOn) {
+    document.body.classList.add("compact");
+    compactOn = true;
+  }
+
+  // when she goes back up, show full stack again
+  if (y < 420 && compactOn) {
+    document.body.classList.remove("compact");
+    compactOn = false;
+  }
+});

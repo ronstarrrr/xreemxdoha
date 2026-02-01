@@ -252,7 +252,102 @@ function buildDayChips(){
     dayChips.appendChild(chip);
   });
 }
+/* =========================================================
+   Swipe Gestures for Day Navigation (Stories-style)
+   - Swipe left  -> next day
+   - Swipe right -> previous day
+   Works on: day chips bar (safe) and doesn’t interfere with scrolling.
+========================================================= */
+const dayChipsWrap = document.getElementById("dayChipsWrap");
+let touchStartX = 0;
+let touchStartY = 0;
+let touchStartT = 0;
 
+function getDayIndex(dayName){
+  return itinerary.findIndex(d => d.day === dayName);
+}
+
+function getCurrentDayIndex(){
+  // Prefer the actively highlighted chip
+  const activeChip = document.querySelector(".dayChip.on");
+  if (activeChip) return getDayIndex(activeChip.dataset.day);
+
+  // Fallback to first
+  return 0;
+}
+
+function scrollToDayIndex(idx){
+  const clamped = Math.max(0, Math.min(itinerary.length - 1, idx));
+  const dayName = itinerary[clamped].day;
+
+  const el = document.getElementById("day-" + slug(dayName));
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  // bring the active chip into view too
+  const chip = [...document.querySelectorAll(".dayChip")].find(c => c.dataset.day === dayName);
+  if (chip) chip.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+
+  haptic(18);
+  spawnEmojiBurst(6);
+}
+
+function onSwipe(dir){
+  const current = getCurrentDayIndex();
+  if (dir === "left") scrollToDayIndex(current + 1);
+  if (dir === "right") scrollToDayIndex(current - 1);
+}
+
+// Touch start
+dayChipsWrap.addEventListener("touchstart", (e) => {
+  if (!e.touches || e.touches.length !== 1) return;
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+  touchStartT = Date.now();
+}, { passive: true });
+
+// Touch end (detect swipe)
+dayChipsWrap.addEventListener("touchend", (e) => {
+  const dt = Date.now() - touchStartT;
+  if (dt > 650) return; // ignore slow drags
+
+  const endTouch = e.changedTouches && e.changedTouches[0];
+  if (!endTouch) return;
+
+  const dx = endTouch.clientX - touchStartX;
+  const dy = endTouch.clientY - touchStartY;
+
+  // Only count mostly-horizontal swipes
+  if (Math.abs(dx) < 45) return;
+  if (Math.abs(dy) > 60) return;
+
+  if (dx < 0) onSwipe("left");
+  else onSwipe("right");
+}, { passive: true });
+
+// Optional: also allow mouse "swipe" with trackpad drag on desktop
+let mouseDown = false;
+let mouseStartX = 0;
+let mouseStartY = 0;
+
+dayChipsWrap.addEventListener("mousedown", (e) => {
+  mouseDown = true;
+  mouseStartX = e.clientX;
+  mouseStartY = e.clientY;
+});
+
+window.addEventListener("mouseup", (e) => {
+  if (!mouseDown) return;
+  mouseDown = false;
+
+  const dx = e.clientX - mouseStartX;
+  const dy = e.clientY - mouseStartY;
+
+  if (Math.abs(dx) < 80) return;
+  if (Math.abs(dy) > 90) return;
+
+  if (dx < 0) onSwipe("left");
+  else onSwipe("right");
+});
 function setActiveChip(dayName){
   document.querySelectorAll(".dayChip").forEach(c => {
     c.classList.toggle("on", c.dataset.day === dayName);

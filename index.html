@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Doha Trip 💘</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- LOCK / QUIZ GATE -->
+  <div id="gate" class="gate">
+    <div class="gateCard">
+      <img class="gateHero" src="assets/hero.jpg" alt="Us" />
+      <h1 class="gateTitle">Doha itinerary unlock challenge 🔐</h1>
+      <p class="gateSub">
+        You unlock the trip day-by-day-ish. Answer correctly to reveal more. 😌
+      </p>
+
+      <div id="lockMsg" class="lockMsg hidden"></div>
+
+      <div id="quiz" class="quiz">
+        <div class="qMeta">
+          <span id="qStep">Question 1 of 3</span>
+          <span id="triesLeft">3 tries left</span>
+        </div>
+
+        <div id="qText" class="qText"></div>
+
+        <div class="qRow">
+          <input id="qInput" class="qInput" type="text" placeholder="Type your answer…" autocomplete="off" />
+          <button id="qBtn" class="qBtn">Unlock</button>
+        </div>
+
+        <div id="qFeedback" class="qFeedback"></div>
+      </div>
+
+      <p class="tiny">P.S. Wrong 3 times and it locks for 24 hours. No appeals. 😂</p>
+    </div>
+  </div>
+
+  <!-- MAIN SITE -->
+  <header class="header">
+    <img class="heroImg" src="assets/hero.jpg" alt="Us in Doha mode" />
+    <h1>Doha itinerary for your visit 💘</h1>
+    <p class="sub">
+      Tap what you’re in for. Skip anything you’re not feeling. Then download the calendar.
+    </p>
+
+    <div class="controls">
+      <span id="count">0 selected</span>
+      <button id="download" disabled>Download calendar (.ics)</button>
+      <button id="reset" class="ghost">Reset picks</button>
+    </div>
+
+    <div class="toolbar">
+      <div class="vibes">
+        <button data-vibe="All" class="vibe on">All</button>
+        <button data-vibe="Beach" class="vibe">Beach</button>
+        <button data-vibe="Culture" class="vibe">Culture</button>
+        <button data-vibe="Art" class="vibe">Art</button>
+        <button data-vibe="Food" class="vibe">Food</button>
+        <button data-vibe="Party" class="vibe">Party</button>
+        <button data-vibe="Wellness" class="vibe">Wellness</button>
+      </div>
+
+      <div class="weather">
+        <span class="weatherLabel">Weather:</span>
+        <button data-weather="nice" class="wBtn on">☀️ Nice</button>
+        <button data-weather="windy" class="wBtn">🌬️ Windy</button>
+      </div>
+    </div>
+
+    <div class="mapBar">
+      <a id="mapsLink" class="mapsLink" href="#" target="_blank" rel="noopener noreferrer">
+        Open selected places in Google Maps 🗺️
+      </a>
+    </div>
+
+    <div class="packingBar">
+      <div class="packingTitle">Packing for your picks 🎒</div>
+      <div id="packingList" class="packingList">Select activities to generate your list…</div>
+    </div>
+  </header>
+
+  <main id="root"></main>
+
+  <footer class="footer">
+    <button id="approveBtn" class="approveBtn">Approve the plan 💌</button>
+    <div id="approvedMsg" class="approvedMsg hidden">Locked in ✅ Doha awaits 💘</div>
+  </footer>
+
+  <div id="stickers" class="stickers" aria-hidden="true"></div>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

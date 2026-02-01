@@ -1,8 +1,11 @@
-// -------------------------------------
-// Existing state you already had
-// -------------------------------------
-const PICKS_KEY = "doha_picks_v2";
-const APPROVED_KEY = "doha_approved_v2";
+/* =========================================================
+   Doha Itinerary Microsite — Script
+   Requires: data.js defines `itinerary = [{ day, items:[...] }]`
+========================================================= */
+
+const PICKS_KEY = "doha_picks_v3";
+const APPROVED_KEY = "doha_approved_v3";
+
 const savedPicks = JSON.parse(localStorage.getItem(PICKS_KEY) || "{}");
 
 let activeVibe = "All";
@@ -15,9 +18,26 @@ function togglePick(id){
   render();
 }
 
-// -------------------------------------
-// 1) Loving emoji shower (on scroll)
-// -------------------------------------
+/* =========================================================
+   Haptic-style feedback (Web-safe)
+   - Uses vibration where supported
+   - Always does micro tap animation via CSS :active
+========================================================= */
+function haptic(ms = 15){
+  try{
+    if (navigator.vibrate) navigator.vibrate(ms);
+  }catch(e){}
+}
+
+/* Add haptic to all button taps */
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("button");
+  if (btn) haptic(12);
+});
+
+/* =========================================================
+   Emoji shower on scroll
+========================================================= */
 const emojiLayer = document.getElementById("emojiLayer");
 const EMOJIS = ["💘","🫶","💞","🥹","✨","🌹","💌","😍"];
 
@@ -37,8 +57,8 @@ function spawnEmojiBurst(intensity = 6){
     setTimeout(() => e.remove(), 1800);
   }
 }
+setTimeout(() => spawnEmojiBurst(10), 450);
 
-// Soft continuous shower when scrolling (throttled)
 window.addEventListener("scroll", () => {
   const y = window.scrollY;
   const delta = Math.abs(y - lastScrollY);
@@ -47,19 +67,14 @@ window.addEventListener("scroll", () => {
   const now = Date.now();
   if (delta > 10 && now - lastBurstAt > 220) {
     lastBurstAt = now;
-    // intensity scales slightly with scroll speed but stays tasteful
     const intensity = Math.min(10, 4 + Math.floor(delta / 40));
     spawnEmojiBurst(intensity);
   }
 });
 
-// A tiny welcome shower on load
-setTimeout(() => spawnEmojiBurst(10), 450);
-
-// -------------------------------------
-// 2) Countdown timer (takeoff vs landing)
-// Ticket times: BHX->DOH Fri 06 Feb 2026 14:10 / 23:50  :contentReference[oaicite:1]{index=1}
-// -------------------------------------
+/* =========================================================
+   Countdown timer (Landing vs Takeoff)
+========================================================= */
 const dd = document.getElementById("dd");
 const hh = document.getElementById("hh");
 const mm = document.getElementById("mm");
@@ -70,15 +85,11 @@ const countdownHint = document.getElementById("countdownHint");
 const toLandingBtn = document.getElementById("toLandingBtn");
 const toTakeoffBtn = document.getElementById("toTakeoffBtn");
 
-// Feb in UK is GMT. Doha is +03:00.
-// We'll countdown either:
-// - Takeoff (BHX local) 2026-02-06T14:10:00+00:00
-// - Landing (DOH local) 2026-02-06T23:50:00+03:00
+// Feb: UK is GMT. Doha is +03:00
 const TARGETS = {
   takeoff: new Date("2026-02-06T14:10:00+00:00").getTime(),
   landing: new Date("2026-02-06T23:50:00+03:00").getTime()
 };
-
 let targetMode = "landing";
 
 function setCountdownMode(mode){
@@ -87,7 +98,6 @@ function setCountdownMode(mode){
   toTakeoffBtn.classList.toggle("on", mode === "takeoff");
   countdownTitle.textContent = mode === "landing" ? "Landing in Doha" : "Takeoff to Doha";
 }
-
 toLandingBtn.onclick = () => setCountdownMode("landing");
 toTakeoffBtn.onclick = () => setCountdownMode("takeoff");
 
@@ -109,20 +119,17 @@ function tickCountdown(){
   ss.textContent = pad(secs);
 
   countdownHint.textContent =
-  "She lands Doha (HIA) at 23:50 on Fri 06 Feb ✈️";
+    targetMode === "landing"
+      ? "She lands Doha (HIA) at 23:50 on Fri 06 Feb ✈️"
+      : "She takes off from Birmingham (BHX) at 14:10 on Fri 06 Feb ✈️";
 }
-
 setCountdownMode("landing");
 setInterval(tickCountdown, 1000);
 tickCountdown();
 
-// -------------------------------------
-// 3) Boarding pass (interactive toggle inbound/outbound)
-// Flight details from ticket :contentReference[oaicite:4]{index=4}
-//
-// IMPORTANT: avoid showing overly sensitive info (passport number).
-// We'll show: passenger name, flight no, date, times, route, cabin, baggage.
-// -------------------------------------
+/* =========================================================
+   Boarding pass (flip + scanner)
+========================================================= */
 const inboundTab = document.getElementById("inboundTab");
 const outboundTab = document.getElementById("outboundTab");
 const bp = document.getElementById("boardingPass");
@@ -160,10 +167,8 @@ const FLIGHTS = {
 
 let activeFlight = "inbound";
 
-function renderBoardingPass(){
-  const f = FLIGHTS[activeFlight];
-
-  bp.innerHTML = `
+function passFaceHTML(f){
+  return `
     <div class="bpTop">
       <div>
         <div class="bpBrand">Qatar Airways • Trip Pass</div>
@@ -196,27 +201,65 @@ function renderBoardingPass(){
   `;
 }
 
+function mountBoardingPass(){
+  bp.innerHTML = `
+    <div class="bpInner">
+      <div class="bpFace bpFront">
+        ${passFaceHTML(FLIGHTS.inbound)}
+      </div>
+      <div class="bpFace bpBack">
+        ${passFaceHTML(FLIGHTS.outbound)}
+      </div>
+    </div>
+  `;
+}
+
 function setFlight(which){
   activeFlight = which;
   inboundTab.classList.toggle("on", which === "inbound");
   outboundTab.classList.toggle("on", which === "outbound");
-  renderBoardingPass();
-  // tiny celebratory emoji pop
+  bp.classList.toggle("flipped", which === "outbound");
+
+  // Nice UX: outbound -> takeoff, inbound -> landing
+  if (which === "inbound") setCountdownMode("landing");
+  if (which === "outbound") setCountdownMode("takeoff");
+
   spawnEmojiBurst(6);
 }
 
 inboundTab.onclick = () => setFlight("inbound");
 outboundTab.onclick = () => setFlight("outbound");
 
-renderBoardingPass();
+mountBoardingPass();
+setFlight("inbound");
 
-// -------------------------------------
-// Your existing itinerary rendering (keep using your data.js)
-// Below is a clean version compatible with what we built before.
-// -------------------------------------
+/* =========================================================
+   Sticky shrink further (auto-compact)
+========================================================= */
+let compactOn = false;
+
+window.addEventListener("scroll", () => {
+  const y = window.scrollY;
+
+  // when scrolling down, compact
+  if (y > 520 && !compactOn) {
+    document.body.classList.add("compact");
+    compactOn = true;
+  }
+  // when scrolling up, expand
+  if (y < 420 && compactOn) {
+    document.body.classList.remove("compact");
+    compactOn = false;
+  }
+});
+
+/* =========================================================
+   Itinerary Rendering + Collapse Days
+========================================================= */
 function vibeMatches(item){
   return activeVibe === "All" || (item.tags || []).includes(activeVibe);
 }
+
 function weatherNudgeNeeded(item){
   return weatherHint === "windy" && item.weatherSensitive === true;
 }
@@ -254,7 +297,7 @@ function updateMapsLink(){
 
   if (!picks.length) {
     mapsLink.href = "https://www.google.com/maps";
-    mapsLink.textContent = "Open Google Maps 🗺️";
+    mapsLink.textContent = "Open selected places in Google Maps 🗺️";
     return;
   }
 
@@ -281,13 +324,13 @@ function renderPicks(){
   document.getElementById("download").disabled = picks.length === 0;
 }
 
-// Calendar export (same as before)
+/* Calendar export (skips Valentine's if you mark it hidden later) */
 function icsEscape(s=""){
   return String(s).replace(/\\n/g, "\\n").replace(/,/g, "\\,").replace(/;/g, "\\;").replace(/\r?\n/g, "\\n");
 }
 
 function downloadICS(){
-  const picks = getSelectedItems().filter(p => !String(p.day).toLowerCase().includes("valentine"));
+  const picks = getSelectedItems();
   const now = new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
 
   let ics = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Doha Trip Microsite//EN","CALSCALE:GREGORIAN"];
@@ -316,13 +359,14 @@ function downloadICS(){
   URL.revokeObjectURL(url);
 }
 
+/* Buttons */
 document.getElementById("download").onclick = downloadICS;
 document.getElementById("reset").onclick = () => {
   localStorage.removeItem(PICKS_KEY);
   location.reload();
 };
 
-// Vibe + weather controls
+/* Vibe + weather controls */
 document.querySelectorAll(".vibe").forEach(btn => {
   btn.onclick = () => { activeVibe = btn.dataset.vibe; render(); };
 });
@@ -330,13 +374,16 @@ document.querySelectorAll(".wBtn").forEach(btn => {
   btn.onclick = () => { weatherHint = btn.dataset.weather; render(); };
 });
 
-// Approve plan moment
+/* Approve plan */
 const approveBtn = document.getElementById("approveBtn");
 const approvedMsg = document.getElementById("approvedMsg");
 
 function setApprovedUI(){
   const approved = localStorage.getItem(APPROVED_KEY) === "yes";
-  if (approved) { approvedMsg.classList.remove("hidden"); approveBtn.disabled = true; }
+  if (approved) {
+    approvedMsg.classList.remove("hidden");
+    approveBtn.disabled = true;
+  }
 }
 
 approveBtn.onclick = () => {
@@ -345,6 +392,16 @@ approveBtn.onclick = () => {
   approveBtn.disabled = true;
   spawnEmojiBurst(14);
 };
+
+/* Collapse state stored per day */
+const COLLAPSE_KEY = "doha_collapsed_days_v1";
+const collapsed = JSON.parse(localStorage.getItem(COLLAPSE_KEY) || "{}");
+
+function toggleDay(dayName){
+  collapsed[dayName] = !collapsed[dayName];
+  localStorage.setItem(COLLAPSE_KEY, JSON.stringify(collapsed));
+  render();
+}
 
 function render(){
   // toggle UI states
@@ -357,9 +414,29 @@ function render(){
   itinerary.forEach(dayBlock => {
     const section = document.createElement("section");
     section.className = "day";
+
+    if (collapsed[dayBlock.day]) section.classList.add("collapsed");
+
+    // Collapsible day header
+    const header = document.createElement("div");
+    header.className = "dayHeader";
+    header.onclick = () => toggleDay(dayBlock.day);
+
     const h2 = document.createElement("h2");
     h2.textContent = dayBlock.day;
-    section.appendChild(h2);
+
+    const chev = document.createElement("div");
+    chev.className = "chev";
+    chev.textContent = "⌄";
+
+    header.appendChild(h2);
+    header.appendChild(chev);
+
+    section.appendChild(header);
+
+    // Day body
+    const body = document.createElement("div");
+    body.className = "dayBody";
 
     dayBlock.items.forEach(item => {
       if (!vibeMatches(item)) return;
@@ -370,14 +447,18 @@ function render(){
       const top = document.createElement("div");
       top.className = "top";
 
-      const title = document.createElement("div");
-      title.innerHTML = `<div class="time">${item.time || ""}</div><div class="title">${item.title}</div>`;
-      top.appendChild(title);
+      const left = document.createElement("div");
+      left.innerHTML = `
+        <div class="time">${item.time || ""}</div>
+        <div class="title">${item.title}</div>
+      `;
 
       const pick = document.createElement("button");
-      pick.className = isSelected(item.id) ? "pick pickBtn on" : "pick pickBtn";
-      pick.textContent = isSelected(item.id) ? "✅ I'm in" : "➕ Add";
-      pick.onclick = () => togglePick(item.id);
+      pick.className = isSelected(item.id) ? "pickBtn on" : "pickBtn";
+      pick.textContent = isSelected(item.id) ? "✅ I'm in" : "＋ Add";
+      pick.onclick = (e) => { e.stopPropagation(); togglePick(item.id); };
+
+      top.appendChild(left);
       top.appendChild(pick);
 
       card.appendChild(top);
@@ -394,7 +475,7 @@ function render(){
       if (item.instagram) links.appendChild(linkBtn("Instagram", item.instagram));
       if (item.maps) links.appendChild(linkBtn("Maps", item.maps));
       if (item.website) links.appendChild(linkBtn("Website", item.website));
-      card.appendChild(links);
+      if (links.childNodes.length) card.appendChild(links);
 
       const tags = document.createElement("div");
       tags.className = "tags";
@@ -404,7 +485,7 @@ function render(){
         pill.textContent = t;
         tags.appendChild(pill);
       });
-      card.appendChild(tags);
+      if (tags.childNodes.length) card.appendChild(tags);
 
       if (weatherNudgeNeeded(item)) {
         const w = document.createElement("div");
@@ -427,18 +508,19 @@ function render(){
         card.appendChild(pr);
       }
 
-      // If you still want Valentine’s blurred, keep your existing logic in data.js
+      // Optional Valentine lock from your data.js:
       if (dayBlock.alwaysHidden) {
         card.classList.add("lockedCard");
         const overlay = document.createElement("div");
         overlay.className = "lockOverlay";
-        overlay.textContent = "Valentine’s Day is under wraps 🔒\nRevealed closer to the time 👀";
+        overlay.textContent = "Valentine’s Day is under wraps 🔒 Revealed closer to the time 👀";
         card.appendChild(overlay);
       }
 
-      section.appendChild(card);
+      body.appendChild(card);
     });
 
+    section.appendChild(body);
     root.appendChild(section);
   });
 
@@ -449,21 +531,3 @@ function render(){
 }
 
 render();
-// Compact sticky mode after scrolling
-let compactOn = false;
-
-window.addEventListener("scroll", () => {
-  const y = window.scrollY;
-
-  // when she scrolls past 520px, compact the sticky stack
-  if (y > 520 && !compactOn) {
-    document.body.classList.add("compact");
-    compactOn = true;
-  }
-
-  // when she goes back up, show full stack again
-  if (y < 420 && compactOn) {
-    document.body.classList.remove("compact");
-    compactOn = false;
-  }
-});

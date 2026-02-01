@@ -109,9 +109,7 @@ function tickCountdown(){
   ss.textContent = pad(secs);
 
   countdownHint.textContent =
-    targetMode === "landing"
-      ? "She lands Doha (HIA) at 23:50 on Fri 06 Feb. :contentReference[oaicite:2]{index=2}"
-      : "She takes off from Birmingham (BHX) at 14:10 on Fri 06 Feb. :contentReference[oaicite:3]{index=3}";
+  "She lands Doha (HIA) at 23:50 on Fri 06 Feb ✈️";
 }
 
 setCountdownMode("landing");

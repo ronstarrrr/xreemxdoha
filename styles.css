@@ -573,3 +573,121 @@ main{
   .countdownGrid{ grid-template-columns: repeat(2, 1fr); }
   .bpBottom{ grid-template-columns: 1fr; }
 }
+/* =========================
+   Day Chips (Swipe-style)
+========================= */
+.dayChipsWrap{
+  background: rgba(255,255,255,.75);
+  border: 1px solid var(--stroke);
+  border-radius: 999px;
+  padding: 8px 10px;
+  box-shadow: 0 10px 22px rgba(0,0,0,.06);
+}
+
+.dayChips{
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+}
+.dayChips::-webkit-scrollbar{ display: none; }
+
+.dayChip{
+  flex: 0 0 auto;
+  padding: 9px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(17,24,39,.10);
+  background: rgba(255,255,255,.85);
+  color: rgba(15,23,42,.85);
+  font-weight: 1000;
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 120ms ease, background 120ms ease;
+}
+.dayChip:active{ transform: scale(.98); }
+
+.dayChip.on{
+  background: #ffe3ee;
+  border-color: rgba(255,77,141,.25);
+}
+
+/* Make day headers anchor nicely under sticky */
+.day{
+  scroll-margin-top: 250px; /* offset for sticky stack */
+}
+
+/* =========================
+   IG Preview Cards
+========================= */
+.igCard{
+  margin-top: 10px;
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  border: 1px solid var(--stroke);
+  background: rgba(255,255,255,.78);
+  box-shadow: 0 10px 24px rgba(0,0,0,.06);
+}
+
+.igLeft{
+  display:flex;
+  align-items:center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.igAvatar{
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(255,77,141,.25), rgba(17,24,39,.08));
+  border: 1px solid rgba(17,24,39,.08);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight: 1000;
+}
+
+.igMeta{
+  min-width: 0;
+}
+.igHandle{
+  font-weight: 1000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.igSub{
+  font-size: 12px;
+  font-weight: 900;
+  color: rgba(15,23,42,.65);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.igOpen{
+  background: rgba(17,24,39,.92);
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 999px;
+  font-weight: 1000;
+  text-decoration:none;
+  flex: 0 0 auto;
+}
+
+/* =========================
+   Confetti Canvas
+========================= */
+.confettiCanvas{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+}

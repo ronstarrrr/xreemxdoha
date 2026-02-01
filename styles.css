@@ -583,7 +583,9 @@ main{
   padding: 8px 10px;
   box-shadow: 0 10px 22px rgba(0,0,0,.06);
 }
-
+.dayChipsWrap{
+  touch-action: pan-y; /* allow vertical scroll, we only detect horizontal swipes */
+}
 .dayChips{
   display: flex;
   gap: 8px;

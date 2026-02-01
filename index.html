@@ -3,106 +3,112 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Doha Trip 💘</title>
+  <title>Doha itinerary 💘</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
+  <!-- Emoji shower layer -->
+  <div id="emojiLayer" class="emojiLayer" aria-hidden="true"></div>
 
   <header class="header">
-    <img class="heroImg" src="assets/hero.jpg" alt="Us in Doha mode" />
+    <!-- HERO (non-sticky) -->
+    <img class="heroImg" src="assets/hero.jpg" alt="Our photo" />
 
     <h1>Doha itinerary for your visit 💘</h1>
     <p class="sub">
       Tap what you’re in for. Skip anything you’re not feeling. We’ll make it perfect together.
     </p>
 
-    <!-- Countdown -->
-    <section class="countdownCard" aria-live="polite">
-      <div class="countdownTop">
-        <div>
-          <div class="countdownLabel">Countdown to Doha ✈️</div>
-          <div class="countdownTitle" id="countdownTitle">Landing in Doha</div>
+    <!-- ✅ Sticky stack -->
+    <div class="stickyStack" id="stickyStack">
+
+      <!-- Countdown -->
+      <section class="countdownCard module" aria-live="polite">
+        <div class="countdownTop">
+          <div>
+            <div class="countdownLabel">Countdown to Doha ✈️</div>
+            <div class="countdownTitle" id="countdownTitle">Landing in Doha</div>
+          </div>
+
+          <div class="countdownToggle">
+            <button class="pillBtn on" id="toLandingBtn" type="button">Landing</button>
+            <button class="pillBtn" id="toTakeoffBtn" type="button">Takeoff</button>
+          </div>
         </div>
 
-        <div class="countdownToggle">
-          <button class="pillBtn on" id="toLandingBtn">Landing</button>
-          <button class="pillBtn" id="toTakeoffBtn">Takeoff</button>
+        <div class="countdownGrid">
+          <div class="timeBox"><div class="num" id="dd">--</div><div class="lbl">Days</div></div>
+          <div class="timeBox"><div class="num" id="hh">--</div><div class="lbl">Hours</div></div>
+          <div class="timeBox"><div class="num" id="mm">--</div><div class="lbl">Mins</div></div>
+          <div class="timeBox"><div class="num" id="ss">--</div><div class="lbl">Secs</div></div>
+        </div>
+
+        <div class="countdownHint" id="countdownHint"></div>
+      </section>
+
+      <!-- Boarding pass -->
+      <section class="bpWrap module" id="bpWrap">
+        <div class="bpHeader">
+          <h2 class="bpTitle">Your boarding pass</h2>
+          <div class="bpTabs">
+            <button class="tab on" id="inboundTab" type="button">Inbound</button>
+            <button class="tab" id="outboundTab" type="button">Outbound</button>
+          </div>
+        </div>
+
+        <div class="boardingPass" id="boardingPass"></div>
+      </section>
+
+      <!-- Controls -->
+      <div class="controls" id="controls">
+        <span id="count">0 selected</span>
+        <button id="download" disabled type="button">Download calendar (.ics)</button>
+        <button id="reset" class="ghost" type="button">Reset picks</button>
+      </div>
+
+      <!-- Filters -->
+      <div class="toolbar" id="toolbar">
+        <div class="vibes">
+          <button data-vibe="All" class="vibe on" type="button">All</button>
+          <button data-vibe="Beach" class="vibe" type="button">Beach</button>
+          <button data-vibe="Culture" class="vibe" type="button">Culture</button>
+          <button data-vibe="Art" class="vibe" type="button">Art</button>
+          <button data-vibe="Food" class="vibe" type="button">Food</button>
+          <button data-vibe="Party" class="vibe" type="button">Party</button>
+          <button data-vibe="Wellness" class="vibe" type="button">Wellness</button>
+        </div>
+
+        <div class="weather">
+          <span class="weatherLabel">Weather:</span>
+          <button data-weather="nice" class="wBtn on" type="button">☀️ Nice</button>
+          <button data-weather="windy" class="wBtn" type="button">🌬️ Windy</button>
         </div>
       </div>
 
-      <div class="countdownGrid">
-        <div class="timeBox"><div class="num" id="dd">--</div><div class="lbl">Days</div></div>
-        <div class="timeBox"><div class="num" id="hh">--</div><div class="lbl">Hours</div></div>
-        <div class="timeBox"><div class="num" id="mm">--</div><div class="lbl">Mins</div></div>
-        <div class="timeBox"><div class="num" id="ss">--</div><div class="lbl">Secs</div></div>
+      <!-- Maps -->
+      <div class="mapBar" id="mapBar">
+        <a id="mapsLink" class="mapsLink" href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer">
+          Open selected places in Google Maps 🗺️
+        </a>
       </div>
 
-      <div class="countdownHint" id="countdownHint"></div>
-    </section>
-
-    <!-- Boarding Pass -->
-    <section class="bpWrap">
-      <div class="bpHeader">
-        <h2 class="bpTitle">Your boarding pass</h2>
-        <div class="bpTabs">
-          <button class="tab on" id="inboundTab">Inbound</button>
-          <button class="tab" id="outboundTab">Outbound</button>
-        </div>
+      <!-- Packing -->
+      <div class="packingBar module" id="packingBar">
+        <div class="packingTitle">Packing for your picks 🎒</div>
+        <div id="packingList" class="packingList">Select activities to generate your list…</div>
       </div>
-
-      <div class="boardingPass" id="boardingPass">
-        <!-- Filled by JS -->
-      </div>
-    </section>
-
-    <!-- Controls -->
-    <div class="controls">
-      <span id="count">0 selected</span>
-      <button id="download" disabled>Download calendar (.ics)</button>
-      <button id="reset" class="ghost">Reset picks</button>
-    </div>
-
-    <!-- Filters (keep your vibes/weather if you want) -->
-    <div class="toolbar">
-      <div class="vibes">
-        <button data-vibe="All" class="vibe on">All</button>
-        <button data-vibe="Beach" class="vibe">Beach</button>
-        <button data-vibe="Culture" class="vibe">Culture</button>
-        <button data-vibe="Art" class="vibe">Art</button>
-        <button data-vibe="Food" class="vibe">Food</button>
-        <button data-vibe="Party" class="vibe">Party</button>
-        <button data-vibe="Wellness" class="vibe">Wellness</button>
-      </div>
-
-      <div class="weather">
-        <span class="weatherLabel">Weather:</span>
-        <button data-weather="nice" class="wBtn on">☀️ Nice</button>
-        <button data-weather="windy" class="wBtn">🌬️ Windy</button>
-      </div>
-    </div>
-
-    <div class="mapBar">
-      <a id="mapsLink" class="mapsLink" href="#" target="_blank" rel="noopener noreferrer">
-        Open selected places in Google Maps 🗺️
-      </a>
-    </div>
-
-    <div class="packingBar">
-      <div class="packingTitle">Packing for your picks 🎒</div>
-      <div id="packingList" class="packingList">Select activities to generate your list…</div>
     </div>
   </header>
 
   <main id="root"></main>
 
   <footer class="footer">
-    <button id="approveBtn" class="approveBtn">Approve the plan 💌</button>
+    <button id="approveBtn" class="approveBtn" type="button">Approve the plan 💌</button>
     <div id="approvedMsg" class="approvedMsg hidden">Locked in ✅ Doha awaits 💘</div>
   </footer>
 
-  <!-- Emoji shower layer -->
-  <div id="emojiLayer" class="emojiLayer" aria-hidden="true"></div>
-
+  <!-- Your itinerary data -->
   <script src="data.js"></script>
   <script src="script.js"></script>
 </body>

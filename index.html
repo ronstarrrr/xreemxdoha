@@ -8,51 +8,61 @@
 </head>
 <body>
 
-  <!-- LOCK / QUIZ GATE -->
-  <div id="gate" class="gate">
-    <div class="gateCard">
-      <img class="gateHero" src="assets/hero.jpg" alt="Us" />
-      <h1 class="gateTitle">Doha itinerary unlock challenge 🔐</h1>
-      <p class="gateSub">
-        You unlock the trip day-by-day-ish. Answer correctly to reveal more. 😌
-      </p>
-
-      <div id="lockMsg" class="lockMsg hidden"></div>
-
-      <div id="quiz" class="quiz">
-        <div class="qMeta">
-          <span id="qStep">Question 1 of 3</span>
-          <span id="triesLeft">3 tries left</span>
-        </div>
-
-        <div id="qText" class="qText"></div>
-
-        <div class="qRow">
-          <input id="qInput" class="qInput" type="text" placeholder="Type your answer…" autocomplete="off" />
-          <button id="qBtn" class="qBtn">Unlock</button>
-        </div>
-
-        <div id="qFeedback" class="qFeedback"></div>
-      </div>
-
-      <p class="tiny">P.S. Wrong 3 times and it locks for 24 hours. No appeals. 😂</p>
-    </div>
-  </div>
-
-  <!-- MAIN SITE -->
   <header class="header">
     <img class="heroImg" src="assets/hero.jpg" alt="Us in Doha mode" />
+
     <h1>Doha itinerary for your visit 💘</h1>
     <p class="sub">
-      Tap what you’re in for. Skip anything you’re not feeling. Then download the calendar.
+      Tap what you’re in for. Skip anything you’re not feeling. We’ll make it perfect together.
     </p>
 
+    <!-- Countdown -->
+    <section class="countdownCard" aria-live="polite">
+      <div class="countdownTop">
+        <div>
+          <div class="countdownLabel">Countdown to Doha ✈️</div>
+          <div class="countdownTitle" id="countdownTitle">Landing in Doha</div>
+        </div>
+
+        <div class="countdownToggle">
+          <button class="pillBtn on" id="toLandingBtn">Landing</button>
+          <button class="pillBtn" id="toTakeoffBtn">Takeoff</button>
+        </div>
+      </div>
+
+      <div class="countdownGrid">
+        <div class="timeBox"><div class="num" id="dd">--</div><div class="lbl">Days</div></div>
+        <div class="timeBox"><div class="num" id="hh">--</div><div class="lbl">Hours</div></div>
+        <div class="timeBox"><div class="num" id="mm">--</div><div class="lbl">Mins</div></div>
+        <div class="timeBox"><div class="num" id="ss">--</div><div class="lbl">Secs</div></div>
+      </div>
+
+      <div class="countdownHint" id="countdownHint"></div>
+    </section>
+
+    <!-- Boarding Pass -->
+    <section class="bpWrap">
+      <div class="bpHeader">
+        <h2 class="bpTitle">Your boarding pass</h2>
+        <div class="bpTabs">
+          <button class="tab on" id="inboundTab">Inbound</button>
+          <button class="tab" id="outboundTab">Outbound</button>
+        </div>
+      </div>
+
+      <div class="boardingPass" id="boardingPass">
+        <!-- Filled by JS -->
+      </div>
+    </section>
+
+    <!-- Controls -->
     <div class="controls">
       <span id="count">0 selected</span>
       <button id="download" disabled>Download calendar (.ics)</button>
       <button id="reset" class="ghost">Reset picks</button>
     </div>
 
+    <!-- Filters (keep your vibes/weather if you want) -->
     <div class="toolbar">
       <div class="vibes">
         <button data-vibe="All" class="vibe on">All</button>
@@ -90,7 +100,8 @@
     <div id="approvedMsg" class="approvedMsg hidden">Locked in ✅ Doha awaits 💘</div>
   </footer>
 
-  <div id="stickers" class="stickers" aria-hidden="true"></div>
+  <!-- Emoji shower layer -->
+  <div id="emojiLayer" class="emojiLayer" aria-hidden="true"></div>
 
   <script src="data.js"></script>
   <script src="script.js"></script>

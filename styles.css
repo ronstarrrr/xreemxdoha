@@ -1,60 +1,163 @@
-/* Emoji shower layer */
-.emojiLayer{
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 999;
+/* =========================
+   Base
+========================= */
+:root{
+  --bg1:#fff3f7;
+  --bg2:#f2f7ff;
+  --card:#ffffffcc;
+  --stroke:rgba(17,24,39,.10);
+  --text:#0f172a;
+  --muted:rgba(15,23,42,.68);
+  --pink:#ff4d8d;
+  --mint:#22c55e;
+  --mint2:#16a34a;
+  --night:#111827;
 }
 
-.emoji{
-  position: absolute;
-  font-size: 18px;
-  opacity: 0.95;
-  animation: floatUp 1.6s ease forwards;
-  filter: drop-shadow(0 6px 10px rgba(0,0,0,.10));
+*{ box-sizing: border-box; }
+html, body{ height: 100%; }
+body{
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  color: var(--text);
+  background:
+    radial-gradient(900px 500px at 10% 0%, var(--bg2), transparent 60%),
+    radial-gradient(900px 500px at 90% 10%, #ffe3ee, transparent 55%),
+    linear-gradient(180deg, var(--bg1), #ffffff 55%);
 }
 
-@keyframes floatUp{
-  0%   { transform: translateY(18px) scale(1); opacity: 0; }
-  10%  { opacity: 0.95; }
-  100% { transform: translateY(-160px) scale(1.15); opacity: 0; }
+/* =========================
+   Layout
+========================= */
+.header{
+  padding: 20px 0 0;
+  text-align: center;
 }
 
-/* Countdown card */
-.countdownCard{
-  margin: 14px auto 0;
-  width: min(860px, 100%);
-  text-align: left;
+.heroImg{
+  width: min(920px, 92vw);
+  height: 280px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 26px;
+  border: 1px solid var(--stroke);
+  box-shadow: 0 18px 45px rgba(0,0,0,.12);
+  display: block;
+  margin: 0 auto;
+}
+
+h1{
+  width: min(920px, 92vw);
+  margin: 18px auto 0;
+  font-size: 38px;
+  letter-spacing: -0.7px;
+}
+
+.sub{
+  width: min(920px, 92vw);
+  margin: 8px auto 0;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+/* Module */
+.module{
+  background: var(--card);
+  border: 1px solid var(--stroke);
+  border-radius: 22px;
   padding: 14px;
-  border-radius: 18px;
-  background: #fff7fb;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+  box-shadow: 0 10px 28px rgba(0,0,0,.06), inset 0 0 0 1px rgba(255,255,255,.35);
+  backdrop-filter: blur(10px);
 }
 
+/* =========================
+   Sticky Stack (with safe CSS)
+========================= */
+.stickyStack{
+  width: min(920px, 92vw);
+  margin: 16px auto 0;
+  position: sticky;
+  top: 12px;
+  z-index: 50;
+  display: grid;
+  gap: 12px;
+  padding: 10px 10px 12px;
+  border-radius: 26px;
+}
+
+/* Glass backing for readability */
+.stickyStack::before{
+  content:"";
+  position: absolute;
+  top: -12px;
+  left: -8px;
+  right: -8px;
+  bottom: -12px;
+  background: linear-gradient(180deg, rgba(255,243,247,.92), rgba(255,255,255,.78));
+  border-radius: 26px;
+  z-index: -1;
+  box-shadow: 0 18px 45px rgba(0,0,0,.06);
+  border: 1px solid rgba(17,24,39,.08);
+  backdrop-filter: blur(10px);
+}
+
+/* Compact mode on scroll */
+body.compact #bpWrap{ display: none; }
+body.compact #packingBar{ display: none; }
+body.compact .stickyStack{ gap: 10px; }
+
+/* =========================
+   Buttons / Haptic Feel
+========================= */
+button{
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 900;
+  cursor: pointer;
+  color: #fff;
+  background: var(--night);
+  box-shadow: 0 10px 25px rgba(17,24,39,.18);
+  transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:hover{ filter: brightness(1.02); }
+button:active{
+  transform: scale(.98);
+  box-shadow: 0 8px 18px rgba(17,24,39,.14);
+}
+
+/* Ghost button */
+.ghost{
+  background: rgba(255,255,255,.9);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--stroke);
+}
+
+/* Small pill buttons */
+.pillBtn{
+  background:#fff;
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.14);
+  padding: 8px 10px;
+}
+.pillBtn.on{ background:#e8fff1; }
+
+/* =========================
+   Countdown
+========================= */
+.countdownCard{ text-align: left; }
 .countdownTop{
   display:flex;
   justify-content: space-between;
-  gap: 12px;
   align-items: center;
+  gap: 10px;
   flex-wrap: wrap;
 }
-
-.countdownLabel{ font-weight: 900; opacity: .7; font-size: 12px; }
-.countdownTitle{ font-weight: 1000; font-size: 18px; }
-
+.countdownLabel{ font-size: 12px; font-weight: 1000; opacity: .7; }
+.countdownTitle{ font-size: 18px; font-weight: 1000; }
 .countdownToggle{ display:flex; gap:8px; }
-.pillBtn{
-  border:0;
-  padding: 8px 10px;
-  border-radius: 999px;
-  background:#fff;
-  color:#111;
-  font-weight: 900;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,.14);
-  cursor:pointer;
-}
-.pillBtn.on{ background:#e8fff1; }
 
 .countdownGrid{
   margin-top: 10px;
@@ -62,34 +165,21 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
 }
-
 .timeBox{
-  background:#fff;
-  border-radius: 16px;
+  background: rgba(255,255,255,.85);
+  border: 1px solid var(--stroke);
+  border-radius: 18px;
   padding: 10px;
   text-align:center;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
 }
-.num{ font-size: 22px; font-weight: 1000; }
-.lbl{ font-size: 12px; opacity: .7; font-weight: 900; }
+.num{ font-size: 24px; font-weight: 1000; letter-spacing: -0.3px; }
+.lbl{ font-size: 12px; font-weight: 900; color: var(--muted); }
+.countdownHint{ margin-top: 10px; font-weight: 900; color: rgba(15,23,42,.75); font-size: 13px; }
 
-.countdownHint{
-  margin-top: 10px;
-  font-weight: 900;
-  opacity: .75;
-  font-size: 13px;
-}
-
-/* Boarding pass */
-.bpWrap{
-  margin-top: 14px;
-  text-align: left;
-  padding: 14px;
-  border-radius: 18px;
-  background: #fff;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
-}
-
+/* =========================
+   Boarding Pass (flip + scanner)
+========================= */
+.bpWrap{ text-align: left; }
 .bpHeader{
   display:flex;
   justify-content: space-between;
@@ -98,26 +188,67 @@
   flex-wrap: wrap;
 }
 .bpTitle{ margin:0; font-size: 16px; font-weight: 1000; }
-
 .bpTabs{ display:flex; gap:8px; }
+
 .tab{
-  border:0;
-  padding: 8px 10px;
-  border-radius: 999px;
   background:#fff;
-  color:#111;
-  font-weight: 1000;
-  cursor:pointer;
+  color: var(--text);
   box-shadow: inset 0 0 0 1px rgba(0,0,0,.14);
+  padding: 8px 10px;
 }
 .tab.on{ background:#ffe3ee; }
 
 .boardingPass{
+  position: relative;
   margin-top: 12px;
   border-radius: 18px;
   overflow: hidden;
+  perspective: 1200px;
+}
+
+.boardingPass::after{
+  content: "";
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  top: -40%;
+  height: 90px;
+  background: linear-gradient(to bottom, transparent, rgba(255,255,255,.18), transparent);
+  opacity: .65;
+  pointer-events: none;
+  animation: scanLine 2.8s ease-in-out infinite;
+  mix-blend-mode: screen;
+}
+
+@keyframes scanLine{
+  0%   { transform: translateY(0); opacity: 0; }
+  10%  { opacity: .6; }
+  50%  { transform: translateY(520px); opacity: .65; }
+  80%  { opacity: .25; }
+  100% { transform: translateY(620px); opacity: 0; }
+}
+
+.bpInner{
+  position: relative;
+  width: 100%;
+  transform-style: preserve-3d;
+  transition: transform 700ms cubic-bezier(.2,.8,.2,1);
+}
+.boardingPass.flipped .bpInner{ transform: rotateY(180deg); }
+
+.bpFace{
+  position: relative;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 18px;
+  overflow: hidden;
   background: linear-gradient(135deg, #111827, #2a0d2f);
-  color: #fff;
+  color:#fff;
+}
+.bpBack{
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
 }
 
 .bpTop{
@@ -128,21 +259,8 @@
   align-items: flex-start;
   flex-wrap: wrap;
 }
-
-.bpBrand{
-  font-weight: 1000;
-  letter-spacing: 0.4px;
-  opacity: .9;
-}
-
-.bpMeta{
-  display:flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  opacity: .95;
-  font-weight: 900;
-  font-size: 12px;
-}
+.bpBrand{ font-weight: 1000; opacity: .9; letter-spacing: .3px; }
+.bpMeta{ display:flex; gap: 10px; flex-wrap: wrap; font-size: 12px; font-weight: 900; }
 .bpChip{
   padding: 6px 10px;
   border-radius: 999px;
@@ -158,20 +276,9 @@
   gap: 14px;
   align-items: center;
 }
-
-.airport{
-  font-weight: 1000;
-  font-size: 22px;
-}
-.city{
-  opacity: .85;
-  font-weight: 900;
-  font-size: 12px;
-}
-.bpArrow{
-  font-size: 18px;
-  opacity: .9;
-}
+.airport{ font-weight: 1000; font-size: 22px; }
+.city{ opacity: .85; font-weight: 900; font-size: 12px; }
+.bpArrow{ font-size: 18px; opacity: .9; }
 
 .bpBottom{
   padding: 14px;
@@ -180,7 +287,6 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
 }
-
 .kv{
   background: rgba(255,255,255,.10);
   border-radius: 14px;
@@ -189,364 +295,153 @@
 .k{ font-size: 11px; opacity: .75; font-weight: 900; }
 .v{ font-size: 14px; font-weight: 1000; margin-top: 2px; }
 
-/* Mobile tweaks */
-@media (max-width: 520px){
-  .heroImg{ height: 260px; }
-  .countdownGrid{ grid-template-columns: repeat(2, 1fr); }
-  .bpBottom{ grid-template-columns: 1fr; }
-}
-/* -----------------------
-   Boarding pass: FLIP
------------------------- */
-.boardingPass{
-  position: relative;
-  border-radius: 18px;
-  overflow: hidden;
-  background: transparent;            /* faces hold the gradient */
-  perspective: 1200px;                /* depth for flip */
-}
-
-/* inner that flips */
-.bpInner{
-  position: relative;
-  width: 100%;
-  transform-style: preserve-3d;
-  transition: transform 700ms cubic-bezier(.2,.8,.2,1);
-}
-
-/* flip state */
-.boardingPass.flipped .bpInner{
-  transform: rotateY(180deg);
-}
-
-/* front & back faces */
-.bpFace{
-  position: relative;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  border-radius: 18px;
-  overflow: hidden;
-  background: linear-gradient(135deg, #111827, #2a0d2f);
-  color: #fff;
-}
-
-/* back face rotated */
-.bpBack{
-  position: absolute;
-  inset: 0;
-  transform: rotateY(180deg);
-}
-
-/* Ensure clickable/tappable elements don’t feel “sticky” */
-.tab, .pillBtn { -webkit-tap-highlight-color: transparent; }
-
-/* -----------------------
-   Boarding pass: SCANNER
------------------------- */
-.boardingPass::after{
-  content: "";
-  position: absolute;
-  left: -10%;
-  right: -10%;
-  top: -40%;
-  height: 90px;
-  background: linear-gradient(
-    to bottom,
-    transparent,
-    rgba(255,255,255,.18),
-    transparent
-  );
-  transform: translateY(0);
-  opacity: .65;
-  pointer-events: none;
-  animation: scanLine 2.6s ease-in-out infinite;
-  mix-blend-mode: screen;
-}
-
-@keyframes scanLine{
-  0%   { transform: translateY(0); opacity: 0; }
-  10%  { opacity: .6; }
-  50%  { transform: translateY(520px); opacity: .65; }
-  80%  { opacity: .25; }
-  100% { transform: translateY(620px); opacity: 0; }
-}
-
-/* Slightly slow scan on mobile (feels smoother) */
-@media (max-width: 520px){
-  .boardingPass::after{ animation-duration: 3.0s; }
-}
 /* =========================
-   APP-UI THEME (Overrides)
+   Controls / Toolbar / Maps / Packing
 ========================= */
-
-:root{
-  --bg1:#fff3f7;
-  --bg2:#f2f7ff;
-  --card:#ffffffcc;
-  --stroke:rgba(17,24,39,.10);
-  --text:#0f172a;
-  --muted:rgba(15,23,42,.68);
-  --pink:#ff4d8d;
-  --mint:#22c55e;
-  --night:#111827;
-}
-
-body{
-  background:
-    radial-gradient(900px 500px at 10% 0%, var(--bg2), transparent 60%),
-    radial-gradient(900px 500px at 90% 10%, #ffe3ee, transparent 55%),
-    linear-gradient(180deg, var(--bg1), #ffffff 55%);
-  color: var(--text);
-}
-
-/* Header becomes centered but content modules align nicely */
-.header{
-  background: transparent;
-  box-shadow: none;
-  padding: 0;
-}
-
-/* Wrap everything in an app shell */
-.header > *{
-  width: min(920px, 92vw);
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Hero stays premium */
-.heroImg{
-  border-radius: 26px;
-  box-shadow: 0 18px 45px rgba(0,0,0,.12);
-  border: 1px solid var(--stroke);
-}
-
-/* Title section becomes “app top” */
-.header h1{
-  margin-top: 18px;
-  font-size: 34px;
-  letter-spacing: -0.6px;
-}
-.sub{
-  margin-top: 6px;
-  font-size: 15px;
-  color: var(--muted);
-}
-
-/* Capsule module style */
-.module{
-  background: var(--card);
-  border: 1px solid var(--stroke);
-  border-radius: 22px;
-  padding: 14px;
-  box-shadow:
-    0 10px 28px rgba(0,0,0,.06),
-    inset 0 0 0 1px rgba(255,255,255,.35);
-  backdrop-filter: blur(10px);
-}
-
-/* Apply module style to existing sections */
-.countdownCard, .bpWrap, .packingBar{
-  border-radius: 22px;
-  border: 1px solid var(--stroke);
-  background: var(--card);
-  backdrop-filter: blur(10px);
-}
-
-/* Make countdown feel like pill boxes */
-.timeBox{
-  border-radius: 18px;
-  background: rgba(255,255,255,.85);
-  border: 1px solid var(--stroke);
-}
-.num{ font-size: 24px; letter-spacing: -0.3px; }
-.lbl{ color: var(--muted); }
-
-/* Buttons become clean pills */
-button{
-  border-radius: 999px;
-  background: var(--night);
-  color: #fff;
-  box-shadow: 0 10px 25px rgba(17,24,39,.18);
-}
-button:active{ transform: translateY(1px); }
-
-/* Ghost buttons (clean iOS pill) */
-.ghost{
-  background: rgba(255,255,255,.9);
-  color: var(--text);
-  box-shadow: inset 0 0 0 1px var(--stroke);
-}
-
-/* Controls look like an app toolbar */
 .controls{
+  display:flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
   padding: 10px 12px;
   border-radius: 999px;
   background: rgba(255,255,255,.75);
   border: 1px solid var(--stroke);
   box-shadow: 0 10px 22px rgba(0,0,0,.06);
-  width: fit-content;
-  margin: 14px auto 0;
-}
-#count{
-  font-weight: 900;
-  color: var(--text);
-  opacity: .85;
+  flex-wrap: wrap;
 }
 
-/* Vibe filter becomes pill row */
+#count{ font-weight: 1000; color: rgba(15,23,42,.8); }
+
 .toolbar{
-  margin-top: 14px;
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
   padding: 12px;
   border-radius: 999px;
   background: rgba(255,255,255,.7);
   border: 1px solid var(--stroke);
   box-shadow: 0 10px 22px rgba(0,0,0,.06);
 }
-.vibes, .weather{
-  gap: 8px;
-}
+
+.vibes, .weather{ display:flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.weatherLabel{ font-weight: 1000; color: rgba(15,23,42,.7); }
+
 .vibe, .wBtn{
   background: rgba(255,255,255,.85);
   color: var(--text);
   box-shadow: inset 0 0 0 1px var(--stroke);
-  font-weight: 900;
+  padding: 8px 12px;
 }
-.vibe.on{ background: #ffe3ee; }
-.wBtn.on{ background: #e8fff1; }
+.vibe.on{ background:#ffe3ee; }
+.wBtn.on{ background:#e8fff1; }
 
-/* Maps link becomes a CTA pill */
+.mapBar{ text-align: center; }
 .mapsLink{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding: 10px 14px;
   border-radius: 999px;
   background: rgba(255,255,255,.85);
   border: 1px solid var(--stroke);
   box-shadow: 0 10px 22px rgba(0,0,0,.06);
+  font-weight: 1000;
+  color: rgba(15,23,42,.85);
+  text-decoration: none;
 }
 
-/* Itinerary layout */
+.packingTitle{ font-weight: 1000; }
+.packingList{ margin-top: 6px; color: rgba(15,23,42,.75); font-weight: 900; }
+
+/* =========================
+   Itinerary Area
+========================= */
 main{
   width: min(920px, 92vw);
-}
-.day h2{
-  margin: 22px 6px 10px;
-  font-size: 16px;
-  letter-spacing: -0.2px;
-  color: rgba(15,23,42,.75);
-  text-transform: uppercase;
+  margin: 10px auto 70px;
+  padding-top: 12px;
 }
 
-/* Cards look like app panels */
+/* Day headers become tappable collapsibles */
+.dayHeader{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.7);
+  border: 1px solid var(--stroke);
+  box-shadow: 0 10px 22px rgba(0,0,0,.06);
+  cursor: pointer;
+  user-select: none;
+}
+.dayHeader h2{
+  margin: 0;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  color: rgba(15,23,42,.75);
+}
+.chev{
+  font-weight: 1000;
+  color: rgba(15,23,42,.6);
+  transition: transform 160ms ease;
+}
+.day.collapsed .chev{ transform: rotate(-90deg); }
+
+.dayBody{
+  margin-top: 10px;
+  display: grid;
+  gap: 12px;
+}
+.day.collapsed .dayBody{ display: none; }
+
 .card{
   background: rgba(255,255,255,.85);
   border: 1px solid var(--stroke);
   border-radius: 22px;
   box-shadow: 0 14px 35px rgba(0,0,0,.08);
-}
-
-/* Top row becomes pill style */
-.top{
-  align-items: center;
-}
-.time{
-  display: inline-flex;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(17,24,39,.06);
-  border: 1px solid rgba(17,24,39,.08);
-  font-weight: 900;
-  color: rgba(15,23,42,.72);
-  width: fit-content;
-}
-.title{
-  margin-top: 8px;
-  font-size: 17px;
-  letter-spacing: -0.2px;
-}
-
-/* The green add button becomes a pill CTA */
-.pickBtn{
-  background: var(--mint);
-  box-shadow: 0 10px 25px rgba(34,197,94,.25);
-}
-.pickBtn.on{
-  background: #16a34a;
-}
-
-/* Links become pills */
-.link{
-  border-radius: 999px;
-  background: rgba(255,255,255,.9);
-  border: 1px solid var(--stroke);
-}
-
-/* Tags become tiny chips */
-.tag{
-  background: rgba(255,77,141,.10);
-  border: 1px solid rgba(255,77,141,.18);
-  color: rgba(15,23,42,.75);
-  font-weight: 900;
-}
-
-/* Prompt / Packing / Weather hints become nice “info pills” */
-.prompt, .packing, .weatherHint{
-  border-radius: 18px;
-  border: 1px solid var(--stroke);
-  box-shadow: 0 10px 24px rgba(0,0,0,.06);
-}
-
-/* Valentine blur overlay still works but looks cleaner */
-.lockOverlay{
-  border: 1px solid var(--stroke);
-  border-radius: 22px;
-}
-
-/* Footer CTA */
-.footer{
-  width: min(920px, 92vw);
-}
-.approveBtn{
-  border-radius: 999px;
-  background: linear-gradient(135deg, #111827, #2a0d2f);
-  box-shadow: 0 18px 45px rgba(0,0,0,.18);
-}
-.approvedMsg{
-  border-radius: 999px;
-}
-
-/* Emoji shower: soften it */
-.emoji{
-  opacity: .9;
-  filter: drop-shadow(0 10px 14px rgba(0,0,0,.10));
-}
-/* ===== Itinerary App Rows ===== */
-
-.card{
   padding: 16px;
+  text-align: left;
 }
 
 .top{
-  display: grid;
+  display:grid;
   grid-template-columns: 1fr auto;
   gap: 12px;
   align-items: center;
 }
 
 .time{
-  display: inline-flex;
-  align-items: center;
+  display:inline-flex;
+  align-items:center;
   gap: 6px;
   padding: 6px 12px;
   border-radius: 999px;
   background: rgba(17,24,39,.06);
+  border: 1px solid rgba(17,24,39,.08);
   font-size: 12px;
-  font-weight: 900;
+  font-weight: 1000;
+  color: rgba(15,23,42,.72);
+  width: fit-content;
 }
 
 .title{
   margin-top: 8px;
   font-size: 18px;
-  font-weight: 900;
+  font-weight: 1000;
   letter-spacing: -0.3px;
 }
+
+.pickBtn{
+  background: var(--mint);
+  box-shadow: 0 10px 25px rgba(34,197,94,.25);
+}
+.pickBtn.on{ background: var(--mint2); }
 
 .note{
   margin-top: 10px;
@@ -555,95 +450,126 @@ main{
   background: rgba(255,255,255,.7);
   border: 1px solid rgba(17,24,39,.08);
   line-height: 1.4;
-}
-
-/* Action pills */
-.pickBtn{
-  padding: 10px 14px;
-  border-radius: 999px;
   font-weight: 900;
+  color: rgba(15,23,42,.8);
 }
 
-/* Links as icon pills */
+.links{
+  margin-top: 10px;
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 .link{
-  display: inline-flex;
-  align-items: center;
+  display:inline-flex;
+  align-items:center;
   gap: 6px;
   padding: 8px 12px;
   border-radius: 999px;
+  background: rgba(255,255,255,.9);
+  border: 1px solid var(--stroke);
+  font-weight: 1000;
+  text-decoration: none;
+  color: rgba(15,23,42,.85);
+}
+
+.tags{
+  margin-top: 10px;
+  display:flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.tag{
+  background: rgba(255,77,141,.10);
+  border: 1px solid rgba(255,77,141,.18);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-weight: 1000;
+  font-size: 12px;
+  color: rgba(15,23,42,.75);
+}
+
+.prompt, .packing, .weatherHint{
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  border: 1px solid var(--stroke);
+  background: rgba(255,255,255,.75);
+  box-shadow: 0 10px 24px rgba(0,0,0,.06);
   font-weight: 900;
+  color: rgba(15,23,42,.75);
 }
+
+/* Valentine locked overlay (if you use it) */
+.lockedCard{ position: relative; overflow: hidden; }
+.lockOverlay{
+  position:absolute;
+  inset: 0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-weight: 1000;
+  color: rgba(15,23,42,.75);
+  background: rgba(255,255,255,.65);
+  backdrop-filter: blur(8px);
+  border-radius: 22px;
+  padding: 18px;
+}
+
 /* =========================
-   STICKY APP HEADER STACK
+   Footer
 ========================= */
-
-.stickyStack{
-  position: sticky;
-  top: 12px;                 /* breathing space from top */
-  z-index: 50;
-  display: grid;
-  gap: 12px;
-  padding-bottom: 10px;
+.footer{
+  width: min(920px, 92vw);
+  margin: 0 auto 40px;
+  text-align: center;
 }
+.approveBtn{
+  width: 100%;
+  max-width: 420px;
+  padding: 14px 18px;
+  background: linear-gradient(135deg, #111827, #2a0d2f);
+  box-shadow: 0 18px 45px rgba(0,0,0,.18);
+}
+.approvedMsg{
+  margin: 14px auto 0;
+  width: fit-content;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.85);
+  border: 1px solid var(--stroke);
+  font-weight: 1000;
+}
+.hidden{ display:none; }
 
-/* Add a subtle “glass” backing so it reads clean over content */
-.stickyStack::before{
-  content:"";
+/* =========================
+   Emoji Shower
+========================= */
+.emojiLayer{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 999;
+}
+.emoji{
   position: absolute;
-  inset: -12px -8px -12px -8px;
-  background: linear-gradient(
-    180deg,
-    rgba(255,243,247,.92),
-    rgba(255,255,255,.78)
-  );
-  border-radius: 26px;
-  filter: blur(0px);
-  z-index: -1;
-  box-shadow: 0 18px 45px rgba(0,0,0,.06);
-  border: 1px solid rgba(17,24,39,.08);
-  backdrop-filter: blur(10px);
+  font-size: 18px;
+  opacity: 0.9;
+  animation: floatUp 1.6s ease forwards;
+  filter: drop-shadow(0 10px 14px rgba(0,0,0,.10));
+}
+@keyframes floatUp{
+  0%   { transform: translateY(18px) scale(1); opacity: 0; }
+  10%  { opacity: 0.95; }
+  100% { transform: translateY(-160px) scale(1.15); opacity: 0; }
 }
 
-/* Ensure sticky doesn't look too tall */
-.countdownCard, .bpWrap{
-  margin-top: 0;
-}
-
-/* Make boarding pass slightly shorter on desktop so it doesn’t dominate */
-.bpWrap{
-  padding: 12px;
-}
-.boardingPass .bpMid{
-  padding: 12px;
-}
-.boardingPass .bpBottom{
-  padding: 12px;
-}
-
-/* Controls + toolbar should feel like pill toolbars */
-.controls, .toolbar{
-  margin: 0 auto;
-}
-
-/* Give the main content some top padding so it doesn't feel cramped under sticky */
-main{
-  padding-top: 12px;
-}
-
-/* Mobile: sticky stack should not eat the screen */
+/* Mobile */
 @media (max-width: 520px){
-  .stickyStack{
-    top: 8px;
-    gap: 10px;
-  }
-
-  /* Reduce heights a bit */
+  h1{ font-size: 30px; }
   .heroImg{ height: 240px; }
-  .boardingPass .bpMid{ grid-template-columns: 1fr auto 1fr; }
-  .boardingPass .airport{ font-size: 20px; }
-}
-
-/* If user scrolls a lot, we can keep it tidy (optional) */
-.compact .bpWrap{
-  display: none; /* hide boarding pass in compact mode */
+  .countdownGrid{ grid-template-columns: repeat(2, 1fr); }
+  .bpBottom{ grid-template-columns: 1fr; }
 }

@@ -11,6 +11,9 @@
   <!-- Emoji shower layer -->
   <div id="emojiLayer" class="emojiLayer" aria-hidden="true"></div>
 
+  <!-- Confetti layer -->
+  <canvas id="confettiCanvas" class="confettiCanvas" aria-hidden="true"></canvas>
+
   <header class="header">
     <!-- HERO (non-sticky) -->
     <img class="heroImg" src="assets/hero.jpg" alt="Our photo" />
@@ -22,6 +25,11 @@
 
     <!-- ✅ Sticky stack -->
     <div class="stickyStack" id="stickyStack">
+
+      <!-- ✅ Day chips (swipe/scroll) -->
+      <div class="dayChipsWrap" id="dayChipsWrap">
+        <div class="dayChips" id="dayChips"></div>
+      </div>
 
       <!-- Countdown -->
       <section class="countdownCard module" aria-live="polite">

@@ -399,7 +399,9 @@ main{
   gap: 12px;
 }
 .day.collapsed .dayBody{ display: none; }
-
+.day{
+  scroll-margin-top: 320px;
+}
 .card{
   background: rgba(255,255,255,.85);
   border: 1px solid var(--stroke);

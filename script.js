@@ -17,7 +17,8 @@ function isSelected(id){ return savedPicks[id] === true; }
 function togglePick(id){
   savedPicks[id] = !isSelected(id);
   localStorage.setItem(PICKS_KEY, JSON.stringify(savedPicks));
-  render();
+if (!activeVibe) activeVibe = "All";
+   render();
 }
 
 /* =========================================================

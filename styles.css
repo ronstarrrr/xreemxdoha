@@ -737,7 +737,10 @@ main{
     padding: 10px;
     border-radius: 22px;
   }
-
+.stickyStack{
+  background: rgba(255,255,255,.72);
+  backdrop-filter: blur(12px);
+}
   /* Chips become true “app tabs” */
   .dayChipsWrap{
     padding: 8px;

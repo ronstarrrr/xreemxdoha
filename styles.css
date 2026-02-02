@@ -910,26 +910,36 @@ main{
   }
 }
 
-/* Make sticky shrink in compact mode more dramatic on mobile */
+/* Compact mode on mobile: shrink, don't hide */
 @media (max-width: 520px){
   body.compact .countdownCard{
     padding: 10px;
+    border-radius: 18px;
   }
+
+  body.compact .countdownGrid{
+    gap: 8px !important;
+  }
+
+  body.compact .timeBox{
+    padding: 10px !important;
+  }
+
   body.compact .bpWrap{
-    display: none; /* hide boarding pass when scrolling deep on mobile */
+    transform: scale(.96);
+    transform-origin: top center;
+    opacity: .98;
   }
-  body.compact .packingBar{
-    display: none; /* optional: declutter */
+
+  body.compact .dayChipsWrap{
+    padding: 6px;
   }
-  body.compact .toolbar{
-    display: none; /* optional: declutter */
+
+  /* Important: ensure content is never "covered" by sticky */
+  .day{
+    scroll-margin-top: 320px;
   }
-  body.compact .controls{
-    display: none; /* optional: declutter */
-  }
-  body.compact .mapBar{
-    display: none; /* optional: declutter */
-  }
+}
 }
 /* =========================
    Mobile optimisation (iOS / WhatsApp)

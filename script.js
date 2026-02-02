@@ -221,14 +221,17 @@ setFlight("inbound");
    Sticky shrink further (auto-compact)
 ========================================================= */
 let compactOn = false;
-window.addEventListener("scroll", () => {
-  const y = window.scrollY;
-  const isMobile = window.matchMedia("(max-width: 520px)").matches;
+
+function isMobile(){
+  return window.matchMedia("(max-width: 520px)").matches;
+}
 
 window.addEventListener("scroll", () => {
   const y = window.scrollY;
-  const onAt = isMobile ? 260 : 520;
-  const offAt = isMobile ? 180 : 420;
+
+  // Delay compact mode on mobile so it doesn't feel like content disappears
+  const onAt  = isMobile() ? 520 : 520;
+  const offAt = isMobile() ? 420 : 420;
 
   if (y > onAt && !compactOn) { document.body.classList.add("compact"); compactOn = true; }
   if (y < offAt && compactOn) { document.body.classList.remove("compact"); compactOn = false; }
